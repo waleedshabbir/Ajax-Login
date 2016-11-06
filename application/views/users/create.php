@@ -60,10 +60,37 @@
 			dataType: 'json',
 			success: function(response) {
 				if(response.success == true){
-					alert('success');
+
+					$('#the-message').append('<div class = "alert alert-success">' +
+					'<span class="glyphicon glyphicon-ok"></span>' +
+					'Data has been saved' +
+					'</div>');
+
+					$('.form-group').removeClass('has-error')
+									.removeClass('has-success');
+
+					$('.text-danger').remove();
+
+					me[0].reset();
+
+					$('.alert-success').delay(500).show(10,function(){
+						$(this).delay(3000).hide(10,function(){
+							$(this).remove();
+						});
+					})
+
 				}
 				else{
-					alert('error');
+					$.each(response.messages, function(key,value){
+						var element = $('#' + key);
+						element.closest('div.form-group')
+						.removeClass('has-error')
+						.addClass(value.length >0 ? 'has-error' : 'has-success')
+						.find('.text-danger')
+						.remove();
+
+						element.after(value);
+					})
 				}
 			}
 		})
